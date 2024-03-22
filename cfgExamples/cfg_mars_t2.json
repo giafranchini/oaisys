@@ -1,0 +1,300 @@
+{
+	"SIMULATION_SETUP": {
+		"outputPath":"",
+		"defaultCfg": "",
+		"numBatches":4,
+		"numSamplesPerBatch":1,
+		"renderImages": true,
+		"saveBlenderFiles": true,
+		"outputIDOffset":0
+	},
+
+	"RENDER_SETUP": {
+
+		"GENERAL": {
+					"renderEngine":"CYCLES",
+					"renderFeatureSet":"EXPERIMENTAL",
+					"renderDevice": "GPU",
+					"performanceTilesX": 256,
+					"performanceTilesY": 256
+					},
+
+		"RENDER_PASSES": [{
+							"type": "RGBDPass",
+							"passParams": {
+											"numIter": 1,
+											"renderDepthActive": true,
+											"renderSamples":128,
+											"lightPathesMaxBounces": 6
+										}
+							},
+							{
+							"type": "SemanticPass",
+							"passParams": {
+											"numIter": 1,
+											"renderSamples":1
+										  }
+							}
+							]
+				
+	},
+
+
+	"RENDER_POST_PROCESSING_EFFECTS_SETUP": {
+		"GENERAL": {
+					"renderPasses": ["combined"]
+					},
+		"POST_EFFECTS": [{
+							"type": "BloomEffect",
+							"effectParams": {
+											"quality": "HIGH",
+											"threshold": 0.8
+										}
+							}
+						]
+				
+	},
+
+
+	"SENSOR_SETUP": {
+		"GENERAL": {
+
+
+					"baseMovement": {	"movementType": "randomEuclideanTarget",
+										"hoverBaseModeEnabled": true,
+									    "hoverBaseStage":"terrain01",
+										"hoverBaseDistance":2.0,
+										"hoverBaseDistanceNoise": 0.05
+									},
+					"sensorMovementType":"randomEuclideanTarget",
+					"hoverBaseModeEnabled": true,
+					"hoverBaseStage":"terrain01",
+					"hoverBaseDistance":2.0,
+					"hoverBaseDistanceNoise": 0.05,
+					"hoverTargetModeEnabled": true,
+					"hoverTargetStage":"terrain01",
+					"hoverTargetDistance":0.0,
+					"positionOffsetEnabled":true,
+					"randomEuclideanPosMin": [-50.0,-50.0,0.0],
+					"randomEuclideanPosMax": [50.0,50.0,0.0],
+					"randomEuclideanEulerMin": [0,0,0],
+					"randomEuclideanEulerMax": [0,0,360],
+					"randomTargetPosMin": [0,0,-4.84],
+					"randomTargetPosMax": [0,0,-4.84],
+					"randomTargetEulerMin": [0,0,0],
+					"randomTargetEulerMax": [0,0,0],
+					"randomTargetRollDeg": [0.0,0.0],
+					"targetObjectActive":true,
+					"tragetObjectMovementType":"random"},
+		"SENSORS": [{"type": "SensorCameraRGBD",
+					"sensorParams": {	
+										"outputBaseName":"Camera_rover",
+										"imageResolution": [1024,1024],
+										"KMatrix": [541.14,	0,			320,
+													0,		541.14,		240,
+													0,		0,			1],
+										"transformation": [0.0,0,0,1.0,0.0,0,0],
+										"triggerInterval": 1,
+										"renderPasses": {
+														"RGBDPass": {"activationSlot":[1], "DepthEnabled": true},
+														"SemanticPass": {"activationSlot":[1]}
+														}
+									}
+					}]
+	},
+
+	"ENVIRONMENT_EFFECTS_SETUP": {
+
+		"GENERAL": {"backgroundStrength": [0.1],
+					"stepInterval": 1
+					},
+
+		"ENVIRONMENT_EFFECTS": [	{"type": "EnvLightBlenderSky",
+									"stepInterval": 1,
+									"environmentEffectsParams": {
+																"stepIntervalOption": "GLOBAL",
+																"stepInterval": 1,
+																"SunSize": [0.545],
+																"SunIntensity": [1.0],
+																"SunElevation": [15.0,90.0],
+																"SunRotation": [0.0,360.0],
+																"SunAltitude": [3000.0,3350.0],
+																"AirDensity": [1.0,2.0],
+																"DustDensity": [10.0,20.0],
+																"OzoneDensity": [0.0,5.0],
+																"SunStrength": [0.0001,0.01],
+																"passParams": 	{ "RGBDPass": {"rgbIDVec": [1,-1,-1,-1]},
+																				  "SemanticPass": {"semanticIDVec": [3518,500,500,500]}
+																				}
+															}
+
+									}
+								]
+	},
+
+
+	"ASSET_SETUP": {
+
+
+
+		"GENERAL": {},
+
+
+
+
+		"MATERIALS": [	{"name": "mars_soil_01",
+						"type":"MaterialTerrain",
+						"materialParams":{
+											"general": {"minNumMixTerrains":3,
+														"maxNumMixTerrains":3,
+														"hardLabelBorders":true,
+														"withReplacement":true,
+														"dispMidLevel":0.0,
+														"dispScale":1.0,
+														"normalStrength":1.0,
+														"mergingNoise": {
+															"Scale": [3.0,4.5],
+															"Detail": [1.0,3.0],
+															"Roughness": [0.2,0.5],
+															"Distortion": [0.0,0.6]
+														}},
+											"terrainTextureList": [
+														{
+															"templatePath": "oaisys_data/examples/assets/materials/soil_t2/soil_t2.json",
+															"passParams": 	{ "rgb": {},
+																			  "semantic_label": {"labelIDVec": [[180,500,5,2]]},
+																			  "instance_label": {}
+																			},
+															"colorAdjustment": 	{
+																"cColorPoints": [[0.70758,0.30417]],
+																"rColorPoints": [[0.50909,0.48750]],
+																"gColorPoints": [[0.5,0.5]],
+																"bColorPoints": [[0.5,0.48750]]
+															},
+															"size": 200.0,
+															"dispStrength": 0.15
+														},
+														{
+															"templatePath": "oaisys_data/examples/assets/materials/bedrock_t4/bedrock_t4.json",
+															"passParams": 	{ "rgb": {},
+																			  "semantic_label": {"labelIDVec": [[1860,500,5,2]]},
+																			  "instance_label": {}
+																			},
+															"colorAdjustment": 	{
+																"cColorPoints": [[0.70758,0.30417]],
+																"rColorPoints": [[0.50909,0.48750]],
+																"gColorPoints": [[0.5,0.5]],
+																"bColorPoints": [[0.5,0.48750]]
+															},
+															"size": 200.0,
+															"dispStrength": 0.25
+														},
+														{
+															"templatePath": "oaisys_data/examples/assets/materials/sand_t2/sand_t2.json",
+															"passParams": 	{ "rgb": {},
+																			  "semantic_label": {"labelIDVec": [[3108,500,5,2]]},
+																			  "instance_label": {}
+																			},
+															"colorAdjustment": 	{
+																"cColorPoints": [[0.70758,0.30417]],
+																"rColorPoints": [[0.50909,0.48750]],
+																"gColorPoints": [[0.5,0.5]],
+																"bColorPoints": [[0.5,0.48750]]
+															},
+															"size": 100.0,
+															"dispStrength": 0.2
+														}
+														]
+								}}
+					  ],
+
+		"STAGES": [{"name": "terrain01",
+					 "type": "StageBlenderLandscape",
+					 "stageParams": {
+							"stageName": "landscape",
+							"stageSizeX": 500,
+							"stageLandscapePreset": "mounds",
+							"assetMaterial": "mars_soil_01",
+							"landscapeParams": {"random_seed":[0,1000]}
+					 		}
+					}
+					],
+
+
+		"MESHES": [ {"name": "rock1",
+					 "type": "MeshMultipleRandom",
+					 "meshParams": {
+							"meshFilePath":"oaisys_data/blender_files/rocks/rocks_01.blend",
+							"meshInstanceName": "rock_02",
+							"numberInstances": [300,500],
+							"randomSwitchOnOff": false,
+							"instanceLabelActive": false,
+							"useDensityMap": true,
+							"densityMapSettings": {
+								"numberInstances": [10000,15000],
+								"densityMap": {
+									"noiseType": "VORONOI",
+									"intensity": 1.8,
+									"size": 1.5,
+									"colorStopPosition_0":0.6,
+									"colorStopColor_0":[0,0,0,1],
+									"colorStopPosition_1":1.0,
+									"colorStopColor_1":[1,1,1,1]
+								}
+							},
+							"defaultSize": 3.0,
+							"strengthRandomScale": 1.0,
+							"randomRotationEnabled": true,
+							"rotationOptionMode":"NOR",
+							"rotationOptionFactor":0.4,
+							"rotationOptionPhase":0.3,
+							"rotationOptionPhaseRandom":0.7,
+							"meshEmitter":"STAGE",
+							"appliedOnStage":"terrain01",
+							"passParams": 	{ 	"rgb": {},
+												"semantic_label": {"labelIDVec": [[2651,200,0,200]]},
+												"instance_label": {}
+											}
+					 		}
+					},
+					{"name": "rock2",
+					 "type": "MeshMultipleRandom",
+					 "meshParams": {
+							"meshFilePath":"oaisys_data/blender_files/rocks/rocks_01.blend",
+							"meshInstanceName": "rock_02",
+							"numberInstances": [300,500],
+							"randomSwitchOnOff": false,
+							"instanceLabelActive": false,
+							"useDensityMap": true,
+							"densityMapSettings": {
+								"numberInstances": [7000,8000],
+								"densityMap": {
+									"noiseType": "VORONOI",
+									"intensity": 1.8,
+									"size": 1.5,
+									"colorStopPosition_0":0.6,
+									"colorStopColor_0":[0,0,0,1],
+									"colorStopPosition_1":1.0,
+									"colorStopColor_1":[1,1,1,1]
+								}
+							},
+							"defaultSize": 3.0,
+							"strengthRandomScale": 1.5,
+							"randomRotationEnabled": true,
+							"rotationOptionMode":"NOR",
+							"rotationOptionFactor":0.4,
+							"rotationOptionPhase":0.3,
+							"rotationOptionPhaseRandom":0.7,
+							"meshEmitter":"STAGE",
+							"appliedOnStage":"terrain01",
+							"passParams": 	{ 	"rgb": {},
+												"semantic_label": {"labelIDVec": [[2651,200,0,200]]},
+												"instance_label": {}
+											}
+					 		}
+					}
+				]
+
+	}
+
+}
